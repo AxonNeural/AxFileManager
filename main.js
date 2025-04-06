@@ -100,8 +100,8 @@ exports.getObjectByTags = async (tags) => {
 
     let callback = [];
     await Promise.all(Object.keys(files).map(async (file) => {
-        await new Promise((resolve) => {
-            const getFile = require(`./storage/partitions/${file}.json`);
+        await new Promise(async (resolve) => {
+            const getFile = JSON.parse(await fs.promises.readFile(`./storage/partitions/${file}.json`, 'utf-8'));
             const filteredObjects = getFile.filter(obj => files[file].includes(obj.ID));
             const cleanedObjects = filteredObjects.map(({ ID, ...rest }) => rest);
             callback = callback.concat(cleanedObjects);
